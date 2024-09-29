@@ -1,10 +1,67 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>The Birthday Project</title>
 		<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+		<style>
+			@font-face {
+				font-family: darlington;
+				src: url(font.ttf);
+			}
+			
+			body {
+				font-family: darlington;
+				background: rgb(10, 0, 25);
+			}
+
+			div {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+			}
+
+			div > * {
+				position: absolute;
+			}
+
+			p {
+				font-size: 25vw;
+				color: white;
+			}
+		</style>
 	</head>
 	<body>
-		
+		<div>
+			<img src="images/letter.png" width="75%" style="filter: brightness(25%);" id="letter" />
+			<p id="countdown">00:00:00</p>
+		</div>
+		<script>
+			(() => {
+				const birthdayDateTime = new Date("2024-09-30 00:00:00.000 UTC+0800").getTime();
+				const countdownText = document.getElementById("countdown");
+				const letter = document.getElementById("letter");
+
+				function run() {
+					const currentDateTime = Date.now();
+					if (currentDateTime >= birthdayDateTime) {
+						letter.style.filter = "brightness(100%)";
+						countdownText.style.display = "none";
+						letter.onclick = () => window.location = atob("aHR0cHM6Ly9saWJyYXJ5b2ZiYWJlbC5pbmZvL2Jvb2ttYXJrLmNnaT9zZXB0ZW1iZXJfMzAsXzIwMjQ=");
+					} else {
+						const secondsLeft = Math.floor((birthdayDateTime - currentDateTime) / 1000);
+						countdownText.innerHTML = [
+							String(Math.floor(secondsLeft / 3600)).padStart(2, "0"),
+							String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0"),
+							String(secondsLeft % 60).padStart(2, "0")
+						].join(":");
+						requestAnimationFrame(run);
+					}
+				}
+
+				run();
+			})();
+		</script>
 	</body>
 </html>
