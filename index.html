@@ -6,61 +6,93 @@
 		<link rel="icon" type="image/x-icon" href="images/favicon.ico">
 		<style>
 			@font-face {
-				font-family: darlington;
+				font-family: Darlington;
 				src: url(font.ttf);
 			}
 			
 			body {
-				font-family: darlington;
+				font-family: Darlington;
 				background: rgb(10, 0, 25);
 			}
 
-			div {
-				display: flex;
+			#main {
+				display: none;
 				justify-content: center;
 				align-items: center;
 				height: 100vh;
 			}
 
-			div > * {
+			#countdown {
 				position: absolute;
-			}
-
-			p {
 				font-size: 25vw;
 				color: white;
+			}
+			
+			#letter {
+				position: absolute;
+				width: 75%;
+				filter: brightness(25%);
 			}
 		</style>
 	</head>
 	<body>
-		<div>
-			<img src="images/letter.png" width="75%" style="filter: brightness(25%);" id="letter" />
-			<p id="countdown">00:00:00</p>
+		<div id="main">
+			<img src="images/letter.png" id="letter" />
+			<p id="countdown">00:00:00:00</p>
 		</div>
 		<script>
 			(() => {
-				const birthdayDateTime = new Date("2024-09-30 00:00:00.000 UTC+0800").getTime();
-				const countdownText = document.getElementById("countdown");
-				const letter = document.getElementById("letter");
-
-				function run() {
+				const {getElementById} = document;
+				const {floor} = Math;
+				
+				const birthdayDateTime = new Date("2025-09-30 00:00:00.000 UTC+0800").getTime();
+				
+				const mainElement = document.getElementById("main");
+				const countdownElement = document.getElementById("countdown");
+				const letterElement = document.getElementById("letter");
+				
+				const secondsInMinute = 60;
+				const secondsInHour = 60 * secondsInMinute;
+				const secondsInDay = 24 * secondsInHour;
+				const secondsInMonth = 30 * secondsInDay;
+				
+				function loop() {
 					const currentDateTime = Date.now();
+					
 					if (currentDateTime >= birthdayDateTime) {
-						letter.style.filter = "brightness(100%)";
-						countdownText.style.display = "none";
-						letter.onclick = () => window.location = atob("aHR0cHM6Ly9saWJyYXJ5b2ZiYWJlbC5pbmZvL2Jvb2ttYXJrLmNnaT9zZXB0ZW1iZXJfMzAsXzIwMjQ=");
+						letterElement.style.filter = "brightness(100%)";
+						countdownElement.style.display = "none";
+						letter.onclick = () => alert("Oopsie baby, I don't know how did you reach this but I haven't done preparing your next gift yet :P");
 					} else {
-						const secondsLeft = Math.floor((birthdayDateTime - currentDateTime) / 1000);
-						countdownText.innerHTML = [
-							String(Math.floor(secondsLeft / 3600)).padStart(2, "0"),
-							String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0"),
-							String(secondsLeft % 60).padStart(2, "0")
+						let secondsLeft = floor((birthdayDateTime - currentDateTime) / 1000);
+						
+						const monthsLeft = floor(secondsLeft / secondsInMonth);
+						secondsLeft %= secondsInMonth;
+
+						const daysLeft = floor(secondsLeft / secondsInDay);
+						secondsLeft %= secondsInDay;
+
+						const hoursLeft = floor(secondsLeft / secondsInHour);
+						secondsLeft %= secondsInHour;
+
+						const minutesLeft = floor(secondsLeft / secondsInMinute);
+						secondsLeft %= secondsInMinute;
+						
+						countdownElement.innerHTML = [
+							String(monthsLeft).padStart(2, "0"),
+							String(daysLeft).padStart(2, "0"),
+							String(hoursLeft).padStart(2, "0"),
+							String(minutesLeft).padStart(2, "0"),
+							String(secondsLeft).padStart(2, "0")
 						].join(":");
-						requestAnimationFrame(run);
+						
+						requestAnimationFrame(loop);
 					}
+					
+					mainElement.style.display = "flex";
 				}
 
-				run();
+				loop();
 			})();
 		</script>
 	</body>
