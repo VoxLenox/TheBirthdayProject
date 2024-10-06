@@ -79,12 +79,12 @@
 						secondsLeft %= secondsInMinute;
 						
 						countdownElement.innerHTML = [
-							String(monthsLeft).padStart(2, "0"), "months",
-							String(daysLeft).padStart(2, "0"), "days",
-							String(hoursLeft).padStart(2, "0"), "hours",
-							String(minutesLeft).padStart(2, "0"), "minutes",
-							String(secondsLeft).padStart(2, "0"), "seconds"
-						].join(" ");
+							String(monthsLeft).padStart(2, "0"),
+							String(daysLeft).padStart(2, "0"),
+							String(hoursLeft).padStart(2, "0"),
+							String(minutesLeft).padStart(2, "0"),
+							String(secondsLeft).padStart(2, "0")
+						].join(":");
 						
 						requestAnimationFrame(loop);
 					}
